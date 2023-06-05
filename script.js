@@ -17,3 +17,23 @@ const calcDivide = function(dividend, divisor) {
 const calcPower = function(base, exponent) {
 	return base ** exponent;
 };
+
+const calcOperate = function(primaryNumber, secondaryNumber, operator) {
+  switch (operator) {
+    case ("+"):
+      return calcAdd(primaryNumber, secondaryNumber);
+    case ("-"):
+      return calcSubtract(primaryNumber, secondaryNumber);
+    case ("*"):
+      return calcMultiply(primaryNumber, secondaryNumber);
+    case ("/"):
+      return calcDivide(primaryNumber, secondaryNumber);
+    case ("^"):
+      return calcPower(primaryNumber, secondaryNumber);
+  }
+};
+
+let firstNumber;
+let secondNumber;
+let operator;
+
