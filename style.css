@@ -1,5 +1,6 @@
 #display, button {
   font-family: monospace;
+  font-size: xx-large;
 }
 
 body {
@@ -10,8 +11,8 @@ body {
 }
 
 button {
-  width: 112px;
-  height: 88px;
+  width: 96px;
+  height: 80px;
   border: solid black 2px;
   border-bottom: solid salmon 2px;
   background-color: lightsalmon;
@@ -39,7 +40,6 @@ button {
   justify-content: center;
   align-items: center;
   background-color: aliceblue;
-  font-size: xx-large;
 }
 
 #button-rows-container {
