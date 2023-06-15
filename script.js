@@ -33,7 +33,68 @@ const calcOperate = function(primaryNumber, secondaryNumber, operator) {
   }
 };
 
-let firstNumber;
-let secondNumber;
-let operator;
+const updateDisplay = function(displayElement = document.querySelector("#display"), message) {
+  displayElement.textContent = message;
+}
 
+const updateQueue = function(event) {
+  let value = event.srcElement.textContent;
+  switch (getQueueAction(value)) {
+    case ("append"):
+      queue.push(value)
+      break;
+    case ("combine"):
+      queue[queue.length - 1] += value;
+      break;
+    case ("overwrite"):
+      queue.pop();
+      queue.push(value);
+      break;
+    case ("remove"):
+      queue.pop();
+      break;
+    case ("clear"):
+      queue = [];
+      break;
+  }
+}
+
+const getQueueAction = function(value) {
+  
+  let lastValue = queue.slice(-1)[0];
+  console.log(lastValue)
+  if ((isOperator(lastValue) && isOperator(value)) || (queue.length === 0)) {
+    return "overwrite";
+  }
+  else if (lastValue[-1] === ".") {
+    console.log(true);
+  }
+  else if ((isNumber(lastValue) && isNumber(value)) || (isNumber(lastValue) && !Array.from(lastValue).includes(".") && value === ".")) {
+    return "combine";
+  }
+  else if ((isNumber(value) && isOperator(lastValue)) || (isNumber(lastValue) && isOperator(value))) {
+    return "append";
+  }
+}
+
+let queue = [];
+
+const isNumber = function(value) {
+  return !isNaN(value);
+}
+
+const isOperator = function(value) {
+  let operators = ["+","-","*","/","^"];
+  if (operators.includes(value)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+for (button of document.querySelectorAll(".button-row button")) {
+  button.addEventListener("click", function(e) {
+    updateQueue(e);
+    console.log(queue);
+  });
+}
