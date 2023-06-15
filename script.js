@@ -19,6 +19,8 @@ const calcPower = function(base, exponent) {
 };
 
 const calcOperate = function(primaryNumber, secondaryNumber, operator) {
+  primaryNumber = parseFloat(primaryNumber);
+  secondaryNumber = parseFloat(secondaryNumber);
   switch (operator) {
     case ("+"):
       return calcAdd(primaryNumber, secondaryNumber);
@@ -33,7 +35,7 @@ const calcOperate = function(primaryNumber, secondaryNumber, operator) {
   }
 };
 
-const updateDisplay = function(displayElement = document.querySelector("#display"), message) {
+const updateDisplay = function(message, displayElement = document.querySelector("#display")) {
   displayElement.textContent = message;
 }
 
@@ -61,13 +63,9 @@ const updateQueue = function(event) {
 
 const getQueueAction = function(value) {
   
-  let lastValue = queue.slice(-1)[0];
-  console.log(lastValue)
+  let lastValue = queue[queue.length - 1];
   if ((isOperator(lastValue) && isOperator(value)) || (queue.length === 0)) {
     return "overwrite";
-  }
-  else if (lastValue[-1] === ".") {
-    console.log(true);
   }
   else if ((isNumber(lastValue) && isNumber(value)) || (isNumber(lastValue) && !Array.from(lastValue).includes(".") && value === ".")) {
     return "combine";
@@ -77,24 +75,37 @@ const getQueueAction = function(value) {
   }
 }
 
-let queue = [];
+const solveQueue = function() {
+  if (queue[queue.length - 1] === "=") {
+    queue = [calcOperate(queue[0], queue[2], queue[1])];
+  }
+  else {
+    let trailingOperator = queue[queue.length - 1];
+    queue = [calcOperate(queue[0], queue[2], queue[1]), trailingOperator];
+  }
+}
+
+const isQueueReady = function() {
+  if (queue.length > 3) return true;
+}
 
 const isNumber = function(value) {
   return !isNaN(value);
 }
 
 const isOperator = function(value) {
-  let operators = ["+","-","*","/","^"];
-  if (operators.includes(value)) {
-    return true;
-  } else {
-    return false;
-  }
+  let operators = ["+","-","*","/","^","="];
+  if (operators.includes(value)) return true;
+  return false;
 }
 
 for (button of document.querySelectorAll(".button-row button")) {
   button.addEventListener("click", function(e) {
     updateQueue(e);
-    console.log(queue);
+    if (isQueueReady()) {
+      solveQueue(); 
+    }
+    updateDisplay(queue.join(" "));
   });
 }
+let queue = [];
