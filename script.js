@@ -36,11 +36,11 @@ const calcOperate = function(primaryNumber, secondaryNumber, operator) {
 };
 
 const updateDisplay = function(message, displayElement = document.querySelector("#display")) {
-  displayElement.textContent = message;
+  displayElement.textContent = (message === "" ? "0" : message);
 }
 
-const updateQueue = function(event) {
-  let value = event.srcElement.textContent;
+const updateQueue = function(e) {
+  let value = e.srcElement.textContent;
   switch (getQueueAction(value)) {
     case ("append"):
       queue.push(value)
@@ -51,6 +51,10 @@ const updateQueue = function(event) {
     case ("overwrite"):
       queue.pop();
       queue.push(value);
+      break;
+    case ("negate"):
+      let negated = (-parseFloat(queue.pop())).toString();
+      queue.push(negated);
       break;
     case ("remove"):
       queue.pop();
@@ -64,13 +68,17 @@ const updateQueue = function(event) {
 const getQueueAction = function(value) {
   
   let lastValue = queue[queue.length - 1];
-  if ((isOperator(lastValue) && isOperator(value)) || (queue.length === 0)) {
+  if ((value === "=" && !isQueueReady(true))) return;
+  if (value === "AC") return "clear";
+  if (value === "DEL") return "remove";
+  if (value === "-+" && isNumber(lastValue)) return "negate";
+  if ((isOperator(lastValue) && isOperator(value)) || (queue.length === 0) && !isOperator(value)) {
     return "overwrite";
   }
-  else if ((isNumber(lastValue) && isNumber(value)) || (isNumber(lastValue) && !Array.from(lastValue).includes(".") && value === ".")) {
+  if ((isNumber(lastValue) && isNumber(value)) || (isNumber(lastValue) && !Array.from(lastValue).includes(".") && value === ".")) {
     return "combine";
   }
-  else if ((isNumber(value) && isOperator(lastValue)) || (isNumber(lastValue) && isOperator(value))) {
+  if ((isNumber(value) && isOperator(lastValue)) || (isNumber(lastValue) && isOperator(value))) {
     return "append";
   }
 }
@@ -85,8 +93,8 @@ const solveQueue = function() {
   }
 }
 
-const isQueueReady = function() {
-  if (queue.length > 3) return true;
+const isQueueReady = function(inputEquals = false) {
+  if ((queue.length > 3) || (queue.length === 3 && inputEquals)) return true;
 }
 
 const isNumber = function(value) {
