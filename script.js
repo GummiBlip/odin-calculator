@@ -107,8 +107,22 @@ const isOperator = function(value) {
   return false;
 }
 
+const playSound = function(e) {
+  let classes = e.srcElement.classList;
+  if (classes.contains("number")) {
+    sounds["number"].play();
+  }
+  else if (classes.contains("operator")) {
+    sounds["operator"].play();
+  }
+  else if (classes.contains("utility")) {
+    sounds["utility"].play();
+  }
+}
+
 const handleClick = function(e) {
   updateQueue(e);
+  playSound(e);
   if (isQueueReady()) {
     solveQueue(); 
   }
@@ -119,3 +133,9 @@ for (button of document.querySelectorAll(".button-row button")) {
   button.addEventListener("click", handleClick)
 }
 let queue = [];
+let sounds = {
+  "number": new Audio("./resources/number.wav"),
+  "operator": new Audio("./resources/operator.wav"),
+  "utility": new Audio("./resources/utility.wav"),
+};
+//Sounds from jfxr @ https://jfxr.frozenfractal.com/
