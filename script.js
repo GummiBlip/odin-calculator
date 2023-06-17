@@ -107,13 +107,15 @@ const isOperator = function(value) {
   return false;
 }
 
+const handleClick = function(e) {
+  updateQueue(e);
+  if (isQueueReady()) {
+    solveQueue(); 
+  }
+  updateDisplay(queue.join(" "));
+};
+
 for (button of document.querySelectorAll(".button-row button")) {
-  button.addEventListener("click", function(e) {
-    updateQueue(e);
-    if (isQueueReady()) {
-      solveQueue(); 
-    }
-    updateDisplay(queue.join(" "));
-  });
+  button.addEventListener("click", handleClick)
 }
 let queue = [];
