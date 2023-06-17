@@ -122,20 +122,32 @@ const playSound = function(e) {
 
 const handleClick = function(e) {
   updateQueue(e);
-  playSound(e);
+  if (!mute) {
+    playSound(e); 
+  }
   if (isQueueReady()) {
     solveQueue(); 
   }
   updateDisplay(queue.join(" "));
 };
 
-for (button of document.querySelectorAll(".button-row button")) {
-  button.addEventListener("click", handleClick)
+let toggleMute = function() {
+  mute = !mute;
+  muteButton.textContent = mute ? "Unmute" : "Mute";
 }
+
 let queue = [];
 let sounds = {
   "number": new Audio("./resources/number.wav"),
   "operator": new Audio("./resources/operator.wav"),
   "utility": new Audio("./resources/utility.wav"),
 };
+let mute = false;
+let muteButton = document.querySelector("#mute");
+
+for (button of document.querySelectorAll(".button-row button")) {
+  button.addEventListener("click", handleClick)
+}
+muteButton.addEventListener("click", toggleMute);
+
 //Sounds from jfxr @ https://jfxr.frozenfractal.com/

@@ -6,7 +6,9 @@
 body {
   background-color: papayawhip;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
   margin: 32px;
 }
 
@@ -46,6 +48,15 @@ button {
   display: flex;
   flex-direction: column;
   
+}
+
+#mute {
+  align-self: flex-start;
+  width: 128px;
+  height: 64px;
+  border: solid black 2px;
+  border-bottom: solid salmon 2px;
+  background-color: lightsalmon;
 }
 
 .button-row {
