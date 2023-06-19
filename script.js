@@ -107,24 +107,31 @@ const isOperator = function(value) {
   return false;
 }
 
-const playSound = function(e) {
+const getSound = function(e) {
   let classes = e.srcElement.classList;
   if (classes.contains("number")) {
-    sounds["number"].play();
+    return sounds["number"];
   }
   else if (classes.contains("operator")) {
-    sounds["operator"].play();
+    return sounds["operator"];
   }
   else if (classes.contains("utility")) {
-    sounds["utility"].play();
+    return sounds["utility"];
   }
 }
 
-const handleClick = function(e) {
-  updateQueue(e);
+const playSound = function(audio) {
+  audio.pause()
+  audio.currentTime = 0;
+  audio.play();
+}
+
+const handleCalculatorClick = function(e) {
   if (!mute) {
-    playSound(e); 
+    let soundEffect = getSound(e);
+    playSound(soundEffect);
   }
+  updateQueue(e);
   if (isQueueReady()) {
     solveQueue(); 
   }
@@ -146,8 +153,8 @@ let mute = false;
 let muteButton = document.querySelector("#mute");
 
 for (button of document.querySelectorAll(".button-row button")) {
-  button.addEventListener("click", handleClick)
+  button.addEventListener("click", handleCalculatorClick)
 }
 muteButton.addEventListener("click", toggleMute);
 
-//Sounds from jfxr @ https://jfxr.frozenfractal.com/
+//Sounds generated with jfxr @ https://jfxr.frozenfractal.com/
