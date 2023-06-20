@@ -1,8 +1,3 @@
-#display, button {
-  font-family: monospace;
-  font-size: xx-large;
-}
-
 body {
   background-color: papayawhip;
   display: flex;
@@ -16,8 +11,30 @@ button {
   width: 96px;
   height: 80px;
   border: solid black 2px;
-  border-bottom: solid salmon 2px;
-  background-color: lightsalmon;
+}
+
+#display, button {
+  font-family: monospace;
+  font-size: xx-large;
+}
+
+.button-row {
+  display: flex;
+}
+
+button.number {
+  border-bottom: solid red 2px;
+  background-color: #FFD6DC;
+}
+
+button.utility {
+  border-bottom: solid yellow 2px;
+  background-color: lemonchiffon;
+}
+
+button.operator {
+  border-bottom: solid greenyellow 2px;
+  background-color: honeydew;
 }
 
 #calculator {
@@ -29,7 +46,7 @@ button {
   height: 640px;
   width: 480px;
   margin: 0;
-  background-color: cornflowerblue;
+  background-color: powderblue;
 }
 
 #display {
@@ -41,13 +58,12 @@ button {
   height: 96px;
   justify-content: center;
   align-items: center;
-  background-color: aliceblue;
+  background-color: skyblue;
 }
 
 #button-rows-container {
   display: flex;
   flex-direction: column;
-  
 }
 
 #mute {
@@ -55,10 +71,6 @@ button {
   width: 128px;
   height: 64px;
   border: solid black 2px;
-  border-bottom: solid salmon 2px;
-  background-color: lightsalmon;
-}
-
-.button-row {
-  display: flex;
+  border-bottom: solid rebeccapurple 4px;
+  background-color: thistle;
 }

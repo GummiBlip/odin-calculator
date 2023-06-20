@@ -39,6 +39,10 @@ const updateDisplay = function(message, displayElement = document.querySelector(
   displayElement.textContent = (message === "" ? "0" : message);
 }
 
+function roundForDisplay(number, places) {
+  return number.toFixed(places);
+}
+
 const updateQueue = function(e) {
   let value = e.srcElement.textContent;
   switch (getQueueAction(value)) {
@@ -134,7 +138,11 @@ const handleCalculatorClick = function(e) {
   updateQueue(e);
   if (isQueueReady()) {
     solveQueue(); 
-  }
+    if (Array.from(queue[0].toString()).length > 8) {
+      queue[0] = queue[0].toFixed(3);
+      }
+    }
+
   updateDisplay(queue.join(" "));
 };
 
