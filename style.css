@@ -24,7 +24,12 @@ button {
 
 button.number {
   border-bottom: solid red 2px;
-  background-color: #FFD6DC;
+  background-color: mistyrose;
+}
+
+button.number:active {
+  background-color: pink;
+  border-bottom: solid maroon 4px;
 }
 
 button.utility {
@@ -32,9 +37,19 @@ button.utility {
   background-color: lemonchiffon;
 }
 
+button.utility:active {
+  background-color: gold;
+  border-bottom: solid goldenrod 4px;
+}
+
 button.operator {
   border-bottom: solid greenyellow 2px;
   background-color: honeydew;
+}
+
+button.operator:active {
+  background-color: springgreen;
+  border-bottom: solid seagreen 4px;
 }
 
 #calculator {
@@ -71,6 +86,11 @@ button.operator {
   width: 128px;
   height: 64px;
   border: solid black 2px;
-  border-bottom: solid rebeccapurple 4px;
+  border-bottom: solid mediumpurple 4px;
   background-color: thistle;
+}
+
+#mute:active {
+  border-bottom: solid rebeccapurple 4px;
+  background-color: plum;
 }
