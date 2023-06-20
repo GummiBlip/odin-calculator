@@ -11,7 +11,7 @@ const calcMultiply = function(multiplicand, multiplier) {
 }
 
 const calcDivide = function(dividend, divisor) {
-	return (divisor === 0 ? "Division by zero error" : dividend / divisor);
+	return (divisor === 0 ? "Division by zero error." : dividend / divisor);
 }
 
 const calcPower = function(base, exponent) {
@@ -54,7 +54,7 @@ const updateQueue = function(e) {
 	let value = e.srcElement.textContent;
 	switch (getQueueAction(value)) {
 		case ("append"):
-			queue.push(value)
+			queue.push(value);
 			break;
 		case ("combine"):
 			queue[queue.length - 1] += value;
@@ -163,7 +163,7 @@ let mute = false;
 let muteButton = document.querySelector("#mute");
 
 for (button of document.querySelectorAll(".button-row button")) {
-	button.addEventListener("click", handleCalculatorClick)
+	button.addEventListener("click", handleCalculatorClick);
 }
 muteButton.addEventListener("click", toggleMute);
 
