@@ -148,9 +148,19 @@ const handleCalculatorClick = function(e) {
 	updateDisplay(queue.join(" "));
 };
 
-const toggleMute = function() {
+const toggleMute = function(e) {
 	mute = !mute;
+  let muteButton = e.srcElement;
 	muteButton.textContent = mute ? "Unmute" : "Mute";
+}
+
+const setupButtons = function(calcButtonsSelector, muteButtonSelector) {
+  let calcButtons = document.querySelectorAll(calcButtonsSelector);
+  for (let calcButton of calcButtons) {
+    calcButton.addEventListener("click", handleCalculatorClick);
+  }
+  let muteButton = document.querySelector(muteButtonSelector);
+  muteButton.addEventListener("click", toggleMute);
 }
 
 let queue = [];
@@ -160,11 +170,7 @@ let sounds = {
 	"utility": new Audio("./resources/utility.wav"),
 };
 let mute = false;
-let muteButton = document.querySelector("#mute");
 
-for (button of document.querySelectorAll(".button-row button")) {
-	button.addEventListener("click", handleCalculatorClick);
-}
-muteButton.addEventListener("click", toggleMute);
+setupButtons(".button-row button", "#mute");
 
 //Sounds generated with jfxr @ https://jfxr.frozenfractal.com/
