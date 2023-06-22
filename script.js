@@ -154,13 +154,21 @@ const toggleMute = function(e) {
 	muteButton.textContent = mute ? "Unmute" : "Mute";
 }
 
-const setupButtons = function(calcButtonsSelector, muteButtonSelector) {
+const processKey = function(e) {
+  let buttonElement = document.querySelector(`button[data-key="${e.key}"]`);
+  if (buttonElement !== null) {
+    buttonElement.click();
+  }
+}
+
+const setupInput = function(calcButtonsSelector, muteButtonSelector) {
   let calcButtons = document.querySelectorAll(calcButtonsSelector);
   for (let calcButton of calcButtons) {
     calcButton.addEventListener("click", handleCalculatorClick);
   }
   let muteButton = document.querySelector(muteButtonSelector);
   muteButton.addEventListener("click", toggleMute);
+  window.addEventListener("keydown", processKey)
 }
 
 let queue = [];
@@ -171,6 +179,6 @@ let sounds = {
 };
 let mute = false;
 
-setupButtons(".button-row button", "#mute");
+setupInput(".button-row button", "#mute");
 
 //Sounds generated with jfxr @ https://jfxr.frozenfractal.com/
