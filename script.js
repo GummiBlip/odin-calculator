@@ -50,8 +50,8 @@ const roundForDisplay = function(places) {
 	}
 }
 
-const updateQueue = function(e) {
-	let value = e.srcElement.textContent;
+const updateQueue = function(buttonLabel) {
+	let value = buttonLabel;
 	switch (getQueueAction(value)) {
 		case ("append"):
 			queue.push(value);
@@ -78,12 +78,12 @@ const updateQueue = function(e) {
 
 const getQueueAction = function(value) {
 
-	let lastValue = queue[queue.length - 1];
+	let lastValue = getLastQueueItem();
 	if ((value === "=" && !isQueueReady(true))) return;
-	if (value === "AC") return "clear";
-	if (value === "DEL") return "remove";
-	if (value === "-+" && isNumber(lastValue)) return "negate";
-	if ((isOperator(lastValue) && isOperator(value)) || (queue.length === 0) && !isOperator(value)) {
+	if (value === "Delete") return "clear";
+	if (value === "Backspace") return "remove";
+	if (value === "`" && isNumber(lastValue)) return "negate";
+	if ((isOperator(lastValue) && isOperator(value)) || (queue.length === 0) && isNumber(value)) {
 		return "overwrite";
 	}
 	if ((isNumber(lastValue) && isNumber(value)) || (isNumber(lastValue) && !Array.from(lastValue)
@@ -96,10 +96,11 @@ const getQueueAction = function(value) {
 }
 
 const solveQueue = function() {
-	if (queue[queue.length - 1] === "=") {
+  let lastQueueItem = getLastQueueItem();
+	if (lastQueueItem === "=") {
 		queue = [calcOperate(queue[0], queue[2], queue[1])];
 	} else {
-		let trailingOperator = queue[queue.length - 1];
+		let trailingOperator = lastQueueItem;
 		queue = [calcOperate(queue[0], queue[2], queue[1]), trailingOperator];
 	}
 }
@@ -109,65 +110,91 @@ const isQueueReady = function(inputEquals = false) {
 }
 
 const isNumber = function(value) {
+  if ((value === "")) return false;
 	return !isNaN(value);
 }
 
 const isOperator = function(value) {
-	let operators = ["+", "-", "*", "/", "^", "="];
+	let operators = ["+", "-", "*", "/", "^", "=",];
 	if (operators.includes(value)) return true;
 	return false;
 }
 
-const getSound = function(e) {
-	let classes = e.srcElement.classList;
-	if (classes.contains("number")) {
-		return sounds["number"];
-	} else if (classes.contains("operator")) {
-		return sounds["operator"];
-	} else if (classes.contains("utility")) {
-		return sounds["utility"];
-	}
+const isUtility = function(value) {
+  let utilities = ["`", "Backspace", "Delete", "Enter", "-+",];
+  if (utilities.includes(value)) return true;
+  return false;
+}
+
+const getLastQueueItem = function() {
+  return queue[queue.length - 1];
+}
+
+
+
+const getSound = function(buttonLabel) {
+	if (isNumber(buttonLabel)) {
+    return sounds["number"]; 
+  } else if (isOperator(buttonLabel)) {
+    return sounds["operator"];
+  } else if (isUtility(buttonLabel)) {
+    return sounds["utility"];
+  } return null;
 }
 
 const playSound = function(audio) {
-	audio.pause();
-	audio.currentTime = 0;
-	audio.play();
+  if (audio) {
+    audio.pause();
+    audio.currentTime = 0;
+    audio.play();
+  }
 }
 
-const handleCalculatorClick = function(e) {
-	if (!mute) {
-		let soundEffect = getSound(e);
-		playSound(soundEffect);
-	}
-	updateQueue(e);
+const handleCalculatorInput = function(buttonLabel) {
+	updateQueue(buttonLabel);
 	if (isQueueReady()) {
 		solveQueue();
-		roundForDisplay(8);
+		roundForDisplay(decimalRounding);
 	}
 	updateDisplay(queue.join(" "));
 };
 
-const toggleMute = function(e) {
+const toggleMute = function() {
 	mute = !mute;
-  let muteButton = e.srcElement;
+  let muteButton = document.querySelector("#mute");
 	muteButton.textContent = mute ? "Unmute" : "Mute";
 }
 
-const processKey = function(e) {
-  let buttonElement = document.querySelector(`button[data-key="${e.key}"]`);
-  if (buttonElement !== null) {
-    buttonElement.click();
+const processButton = function(e) {
+  let buttonLabel = e.srcElement.getAttribute("data-key");
+  if (!mute) {
+		let soundEffect = getSound(buttonLabel);
+		playSound(soundEffect);
+	}
+  if (buttonLabel === "m") {
+    toggleMute(e);
+  } else {
+    handleCalculatorInput(buttonLabel);
   }
 }
 
+const processKey = function(e) {
+  let buttonLabel = e.key;
+  if (!mute) {
+		let soundEffect = getSound(buttonLabel);
+		playSound(soundEffect);
+	}
+  if (buttonLabel === "m") {
+    toggleMute(e);
+  } 
+  handleCalculatorInput(buttonLabel);
+}
+
 const setupInput = function(calcButtonsSelector, muteButtonSelector) {
-  let calcButtons = document.querySelectorAll(calcButtonsSelector);
-  for (let calcButton of calcButtons) {
-    calcButton.addEventListener("click", handleCalculatorClick);
+  let buttons = document.querySelectorAll("button");
+  for (let button of buttons) {
+    button.addEventListener("click", processButton);
   }
-  let muteButton = document.querySelector(muteButtonSelector);
-  muteButton.addEventListener("click", toggleMute);
   window.addEventListener("keydown", processKey)
 }
 
@@ -178,6 +205,7 @@ let sounds = {
 	"utility": new Audio("./resources/utility.wav"),
 };
 let mute = false;
+let decimalRounding = 8;
 
 setupInput(".button-row button", "#mute");
 
